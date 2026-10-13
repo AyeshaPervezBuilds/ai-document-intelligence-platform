@@ -70,3 +70,63 @@ async def upload_document(
     db.commit()
     db.refresh(document)
     return document 
+
+    
+
+@router.get("", response_model=list[DocumentOut])
+def list_documents(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """List all documents owned by the current user."""
+    documents = (
+        db.query(Document)
+        .filter(Document.user_id == current_user.id)
+        .order_by(Document.created_at.desc())
+        .all()
+    )
+    return documents
+
+
+@router.get("/{document_id}", response_model=DocumentOut)
+def get_document(
+    document_id: uuid.UUID,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Get a single document by ID (only if owned by current user)."""
+    document = (
+        db.query(Document)
+        .filter(Document.id == document_id, Document.user_id == current_user.id)
+        .first()
+    )
+    if not document:
+        raise HTTPException(status_code=404, detail="Document not found")
+    return document
+
+
+@router.delete("/{document_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_document(
+    document_id: uuid.UUID,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Delete a document (file from disk + DB record)."""
+    document = (
+        db.query(Document)
+        .filter(Document.id == document_id, Document.user_id == current_user.id)
+        .first()
+    )
+    if not document:
+        raise HTTPException(status_code=404, detail="Document not found")
+
+    # Remove file from disk (if exists)
+    try:
+        if os.path.exists(document.file_path):
+            os.remove(document.file_path)
+    except OSError:
+        pass  # Don't fail the request if file removal fails
+
+    db.delete(document)
+    db.commit()
+    return None  
