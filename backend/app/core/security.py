@@ -38,3 +38,15 @@ def create_access_token(subject: str) -> str:
         settings.jwt_secret_key,
         algorithm=settings.jwt_algorithm,
     ) 
+
+
+    
+
+def decode_access_token(token: str) -> dict:
+    """Decode and verify a JWT access token. Raises jwt.PyJWTError on failure."""
+    payload = jwt.decode(
+        token,
+        settings.jwt_secret_key,
+        algorithms=[settings.jwt_algorithm],
+    )
+    return payload 
