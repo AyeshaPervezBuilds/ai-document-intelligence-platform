@@ -2,14 +2,15 @@ import os
 import uuid
 from pathlib import Path
 
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, status
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, UploadFile, File, status
 from sqlalchemy.orm import Session
 
 from app.db.session import get_db
 from app.models.document import Document
 from app.models.user import User
 from app.schemas.document import DocumentOut
-from app.routers.auth import get_current_user
+from app.services.ingestion import ingest_document 
+from app.routers.auth import get_current_user 
 
 router = APIRouter(prefix="/documents", tags=["documents"])
 
@@ -28,6 +29,7 @@ MAX_FILE_SIZE = 20 * 1024 * 1024  # 20 MB
 
 @router.post("/upload", response_model=DocumentOut, status_code=status.HTTP_201_CREATED)
 async def upload_document(
+    background_tasks: BackgroundTasks,
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
@@ -69,7 +71,8 @@ async def upload_document(
     db.add(document)
     db.commit()
     db.refresh(document)
-    return document 
+    background_tasks.add_task(ingest_document, document.id, db)
+    return document  
 
     
 
