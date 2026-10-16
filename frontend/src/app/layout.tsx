@@ -1,26 +1,36 @@
-"use client";
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import "./globals.css";
+import { AuthProvider } from "@/lib/auth-context";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
 
-import { useAuth } from "@/lib/auth-context";
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
 
-export default function HomePage() {
-  const router = useRouter();
-  const { user, loading } = useAuth();
+export const metadata: Metadata = {
+  title: "Document Intelligence Platform",
+  description:
+    "AI-powered document Q&A with hybrid retrieval and citation-grounded answers.",
+};
 
-  useEffect(() => {
-    if (loading) return;
-    if (user) {
-      router.replace("/dashboard");
-    } else {
-      router.replace("/login");
-    }
-  }, [user, loading, router]);
-
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-900">
-      <div className="text-slate-400">Loading...</div>
-    </div>
+    <html lang="en">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <AuthProvider>{children}</AuthProvider>
+      </body>
+    </html>
   );
 } 
