@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import { useAuth } from "@/lib/auth-context";
 import * as api from "@/lib/api";
@@ -49,12 +50,14 @@ export default function DashboardPage() {
     setError(null);
     try {
       await api.uploadDocument(file);
+      toast.success(`"${file.name}" uploaded successfully! Processing started.`);
       await loadDocuments();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Upload failed");
+      const msg = err instanceof Error ? err.message : "Upload failed";
+      setError(msg);
+      toast.error(msg);
     } finally {
       setUploading(false);
-      // reset input
       e.target.value = "";
     }
   };
@@ -64,8 +67,11 @@ export default function DashboardPage() {
     try {
       await api.deleteDocument(id);
       setDocuments((docs) => docs.filter((d) => d.id !== id));
+      toast.success("Document deleted.");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Delete failed");
+      const msg = err instanceof Error ? err.message : "Delete failed";
+      setError(msg);
+      toast.error(msg);
     }
   };
 
@@ -96,7 +102,7 @@ export default function DashboardPage() {
       </header>
 
       <main className="max-w-7xl mx-auto px-6 py-8">
-        {/* Error */}
+        {/* Error Banner */}
         {error && (
           <div className="mb-6 p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-300 text-sm">
             {error}
@@ -157,11 +163,11 @@ export default function DashboardPage() {
             )}
           </div>
 
-                    {/* Chat panel */}
+          {/* Chat panel */}
           <div className="lg:col-span-2 bg-slate-800/40 border border-slate-800 rounded-2xl p-6">
             <h2 className="text-lg font-semibold mb-4">Chat</h2>
             <Chat />
-          </div> 
+          </div>
         </div>
       </main>
     </div>
