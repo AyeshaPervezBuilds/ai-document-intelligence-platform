@@ -16,6 +16,7 @@ export default function DashboardPage() {
   const [docsLoading, setDocsLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   // Redirect if not logged in
   useEffect(() => {
@@ -59,6 +60,38 @@ export default function DashboardPage() {
     } finally {
       setUploading(false);
       e.target.value = "";
+    }
+  };
+
+  const onDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const onDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const onDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    
+    const file = e.dataTransfer.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    setError(null);
+    try {
+      await api.uploadDocument(file);
+      toast.success(`"${file.name}" uploaded successfully! Processing started.`);
+      await loadDocuments();
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Upload failed";
+      setError(msg);
+      toast.error(msg);
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -110,8 +143,15 @@ export default function DashboardPage() {
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Documents panel */}
-          <div className="lg:col-span-1 bg-slate-800/40 border border-slate-800 rounded-2xl p-6">
+          {/* Documents panel with Drag & Drop */}
+          <div 
+            className={`lg:col-span-1 bg-slate-800/40 border rounded-2xl p-6 transition-colors ${
+              isDragging ? "border-blue-500 bg-blue-500/10" : "border-slate-800"
+            }`}
+            onDragOver={onDragOver}
+            onDragLeave={onDragLeave}
+            onDrop={onDrop}
+          >
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold">Documents</h2>
               <label className="cursor-pointer">
@@ -131,9 +171,12 @@ export default function DashboardPage() {
             {docsLoading ? (
               <p className="text-slate-500 text-sm">Loading...</p>
             ) : documents.length === 0 ? (
-              <p className="text-slate-500 text-sm">
-                No documents yet. Upload a PDF, TXT, or DOCX to get started.
-              </p>
+              <div className="text-center py-8 border-2 border-dashed border-slate-700 rounded-xl">
+                <p className="text-slate-500 text-sm">
+                  {isDragging ? "Drop your file here" : "Drag & drop a file here, or click Upload"}
+                </p>
+                <p className="text-slate-600 text-xs mt-2">PDF, TXT, or DOCX</p>
+              </div>
             ) : (
               <ul className="space-y-2">
                 {documents.map((doc) => (
