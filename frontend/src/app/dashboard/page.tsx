@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 
 import { useAuth } from "@/lib/auth-context";
 import * as api from "@/lib/api";
+import Chat from "@/components/Chat";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -156,14 +157,11 @@ export default function DashboardPage() {
             )}
           </div>
 
-          {/* Chat panel placeholder */}
+                    {/* Chat panel */}
           <div className="lg:col-span-2 bg-slate-800/40 border border-slate-800 rounded-2xl p-6">
             <h2 className="text-lg font-semibold mb-4">Chat</h2>
-            <p className="text-slate-500 text-sm">
-              Chat interface coming next. This is where you'll ask questions and
-              see citation-grounded answers.
-            </p>
-          </div>
+            <Chat />
+          </div> 
         </div>
       </main>
     </div>
