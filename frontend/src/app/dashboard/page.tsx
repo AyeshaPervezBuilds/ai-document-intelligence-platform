@@ -169,15 +169,22 @@ export default function DashboardPage() {
             </div>
 
             {docsLoading ? (
-              <p className="text-slate-500 text-sm">Loading...</p>
+              /* Loading Skeleton */
+              <div className="space-y-3 animate-pulse">
+                <div className="h-16 bg-slate-800/80 rounded-lg border border-slate-700/50"></div>
+                <div className="h-16 bg-slate-800/80 rounded-lg border border-slate-700/50"></div>
+                <div className="h-16 bg-slate-800/80 rounded-lg border border-slate-700/50"></div>
+              </div>
             ) : documents.length === 0 ? (
-              <div className="text-center py-8 border-2 border-dashed border-slate-700 rounded-xl">
+              /* Empty State */
+              <div className="text-center py-10 border-2 border-dashed border-slate-700 rounded-xl">
                 <p className="text-slate-500 text-sm">
                   {isDragging ? "Drop your file here" : "Drag & drop a file here, or click Upload"}
                 </p>
                 <p className="text-slate-600 text-xs mt-2">PDF, TXT, or DOCX</p>
               </div>
             ) : (
+              /* Document List */
               <ul className="space-y-2">
                 {documents.map((doc) => (
                   <li
