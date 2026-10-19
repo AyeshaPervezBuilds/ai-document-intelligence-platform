@@ -14,8 +14,8 @@ from app.routers.auth import get_current_user
 
 router = APIRouter(prefix="/documents", tags=["documents"])
 
-# Storage directory for uploaded files
-
+# Use a path relative to this file, so it works both locally and in CI
+UPLOAD_DIR = Path(__file__).resolve().parent.parent.parent / "uploads"
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 ALLOWED_CONTENT_TYPES = {
@@ -74,7 +74,6 @@ async def upload_document(
     background_tasks.add_task(ingest_document, document.id, db)
     return document  
 
-    
 
 @router.get("", response_model=list[DocumentOut])
 def list_documents(
@@ -132,4 +131,4 @@ def delete_document(
 
     db.delete(document)
     db.commit()
-    return None  
+    return None 
