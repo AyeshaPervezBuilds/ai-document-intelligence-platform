@@ -9,4 +9,4 @@ alembic==1.13.3
 bcrypt==4.2.0
 PyJWT==2.9.0
 python-multipart==0.0.12 
-pgvector==0.4.2 pgvector==0.4.2
+pgvector==0.4.2
