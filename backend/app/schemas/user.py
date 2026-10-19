@@ -57,4 +57,16 @@ class UserOut(BaseModel):
 
 class Token(BaseModel):
     access_token: str
-    token_type: str = "bearer"  
+    token_type: str = "bearer" 
+class ForgotPasswordRequest(BaseModel):
+    email: EmailStr 
+
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    new_password: str
+
+    @field_validator("new_password")
+    @classmethod
+    def validate_password(cls, v: str) -> str:
+        return _validate_password_strength(v) 
