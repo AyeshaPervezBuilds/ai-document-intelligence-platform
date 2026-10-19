@@ -15,7 +15,7 @@ from app.routers.auth import get_current_user
 router = APIRouter(prefix="/documents", tags=["documents"])
 
 # Storage directory for uploaded files
-UPLOAD_DIR = Path("/workspaces/ai-document-intelligence-platform/backend/uploads")
+
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 ALLOWED_CONTENT_TYPES = {
