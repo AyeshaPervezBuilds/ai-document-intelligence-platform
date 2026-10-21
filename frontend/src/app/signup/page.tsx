@@ -4,7 +4,7 @@ import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-import { useAuth } from "@/lib/auth-context";
+import { useAuth } from "@/lib/authcontext";
 
 export default function SignupPage() {
   const router = useRouter();

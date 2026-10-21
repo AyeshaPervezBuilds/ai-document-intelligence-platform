@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-import { useAuth } from "@/lib/auth-context";
+import { useAuth } from "@/lib/authcontext";
 import * as api from "@/lib/api";
 import Chat from "@/components/Chat";
 
