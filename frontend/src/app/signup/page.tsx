@@ -4,7 +4,7 @@ import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-import { useAuth } from "@/lib/authcontext";
+import { useAuth } from "../../lib/auth-context";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -12,7 +12,7 @@ export default function SignupPage() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // NEW
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -34,18 +34,11 @@ export default function SignupPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">
-            Document Intelligence
-          </h1>
-          <p className="text-slate-400 text-sm">
-            Create an account to get started
-          </p>
+          <h1 className="text-3xl font-bold text-white mb-2">Document Intelligence</h1>
+          <p className="text-slate-400 text-sm">Create an account to get started</p>
         </div>
 
-        <form
-          onSubmit={handleSubmit}
-          className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-8 shadow-2xl"
-        >
+        <form onSubmit={handleSubmit} className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-8 shadow-2xl">
           <h2 className="text-2xl font-semibold text-white mb-6">Sign Up</h2>
 
           {error && (
@@ -55,9 +48,7 @@ export default function SignupPage() {
           )}
 
           <div className="mb-4">
-            <label className="block text-sm font-medium text-slate-300 mb-2">
-              Email
-            </label>
+            <label className="block text-sm font-medium text-slate-300 mb-2">Email</label>
             <input
               type="email"
               value={email}
@@ -69,9 +60,7 @@ export default function SignupPage() {
           </div>
 
           <div className="mb-2">
-            <label className="block text-sm font-medium text-slate-300 mb-2">
-              Password
-            </label>
+            <label className="block text-sm font-medium text-slate-300 mb-2">Password</label>
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
@@ -86,7 +75,6 @@ export default function SignupPage() {
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 focus:outline-none transition-colors"
-                aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? (
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
@@ -103,24 +91,16 @@ export default function SignupPage() {
           </div>
 
           <p className="mb-6 text-xs text-slate-500">
-            Must be 8+ chars with uppercase, lowercase, digit, and special
-            character.
+            Must be 8+ chars with uppercase, lowercase, digit, and special character.
           </p>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 disabled:bg-blue-800 disabled:cursor-not-allowed text-white font-medium transition-colors"
-          >
+          <button type="submit" disabled={loading} className="w-full py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 disabled:bg-blue-800 disabled:cursor-not-allowed text-white font-medium transition-colors">
             {loading ? "Creating account..." : "Create Account"}
           </button>
 
           <p className="mt-6 text-center text-sm text-slate-400">
             Already have an account?{" "}
-            <Link
-              href="/login"
-              className="text-blue-400 hover:text-blue-300 font-medium"
-            >
+            <Link href="/login" className="text-blue-400 hover:text-blue-300 font-medium">
               Sign in
             </Link>
           </p>

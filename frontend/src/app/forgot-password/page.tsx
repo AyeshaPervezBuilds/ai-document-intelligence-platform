@@ -3,7 +3,7 @@
 import { useState, FormEvent } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
-import { api } from "@/lib/api"; 
+import { api } from "../../lib/api"; 
 
 // Note: Aapko api.ts mein forgotPassword function add karna hoga (neeche bataya hai)
 
