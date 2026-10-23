@@ -2,8 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-
-import { useAuth } from "../../lib/authcontext";
+import { useAuth } from "../lib/auth-context";
 
 export default function HomePage() {
   const router = useRouter();
@@ -11,11 +10,8 @@ export default function HomePage() {
 
   useEffect(() => {
     if (loading) return;
-    if (user) {
-      router.replace("/dashboard");
-    } else {
-      router.replace("/login");
-    }
+    if (user) router.replace("/dashboard");
+    else router.replace("/login");
   }, [user, loading, router]);
 
   return (
@@ -24,4 +20,3 @@ export default function HomePage() {
     </div>
   );
 } 
-              
