@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, FormEvent, useRef, useEffect } from "react";
-import * as api from "../lib/api";
+import * as api from "@/lib/api";
 
 interface ChatMessage {
   role: "user" | "assistant";
