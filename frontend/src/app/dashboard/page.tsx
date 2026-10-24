@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-import { useAuth } from "../lib/auth-context";
-import * as api from "../lib/api";
-import Chat from "../components/Chat";
+import { toast } from "sonner"; 
+import { useAuth } from "@/lib/auth-context";
+import * as api from "@/lib/api";
+import Chat from "@/components/Chat";
 
 export default function DashboardPage() {
   const router = useRouter();
