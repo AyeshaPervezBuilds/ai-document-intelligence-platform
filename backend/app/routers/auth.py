@@ -22,6 +22,7 @@ from app.core.security import (
     create_access_token,
     decode_access_token,
 )
+from app.services.email import send_password_reset_email
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 bearer_scheme = HTTPBearer()
@@ -96,8 +97,13 @@ def forgot_password(request: ForgotPasswordRequest, db: Session = Depends(get_db
     db.add(reset_token)
     db.commit()
 
-    print(f"\n🔐 PASSWORD RESET LINK for {user.email}:")
-    print(f"http://localhost:3000/reset-password?token={token}\n")
+    # In production, change this to your actual frontend URL
+    reset_link = f"https://upgraded-space-fiesta-r7696r79j545fpwpw-3000.app.github.dev/reset-password?token={token}"
+
+    try:
+        send_password_reset_email(user.email, reset_link)
+    except Exception as e:
+        print(f"Email send error: {e}")
 
     return {"message": "If that email is registered, a reset link has been sent."}
 
@@ -123,4 +129,4 @@ def reset_password(request: ResetPasswordRequest, db: Session = Depends(get_db))
     reset_token.used_at = datetime.utcnow()
     
     db.commit()
-    return {"message": "Password reset successfully. You can now log in."}
+    return {"message": "Password reset successfully. You can now log in."} 
