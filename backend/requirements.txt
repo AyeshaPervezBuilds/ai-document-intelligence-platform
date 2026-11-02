@@ -16,3 +16,4 @@ pypdf==6.20.1
 sentence-transformers==5.0.0
 rank-bm25==0.2.2
 groq==1.7.0
+resend==2.50.1 
